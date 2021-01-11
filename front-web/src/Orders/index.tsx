@@ -14,16 +14,16 @@ function Orders() {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
     const [orderLocation, setOrderLocation] = useState<OrderLocationData>();
-    const totalPrice = selectedProducts.reduce((sum,item) => {
+    const totalPrice = selectedProducts.reduce((sum, item) => {
         return sum + item.price;
-    },0);
+    }, 0);
 
     useEffect(() => {
         fetchProducts()
             .then(response => setProducts(response.data))
             .catch(() => {
 
-             toast.warning('Erro ao listar produtos');
+                toast.warning('Erro ao listar produtos');
             })
     }, []);
 
@@ -41,18 +41,19 @@ function Orders() {
     const handleSubmit = () => {
         const productsIds = selectedProducts.map(({ id }) => ({ id }));
         const payload = {
-          ...orderLocation!,
-          products: productsIds
-        };
-      
-        saveOrder(payload).then((response) => {
-          toast.error(`Pedido enviado com sucesso! Nº ${response.data.id}`);
-          setSelectedProducts([]);
-        })
-          .catch(() => {
-            toast.warning('Erro ao enviar pedido');
-          })
-      };
+            ...orderLocation!,
+            products: productsIds
+        }
+
+        saveOrder(payload)
+            .then((response) => {
+                toast.error(`Pedido enviado com sucesso! Nº ${response.data.id}`);
+                setSelectedProducts([]);
+            })
+            .catch(() => {
+                toast.warning('Erro ao enviar pedido');
+            })
+    };
 
     return (
         <>
@@ -65,7 +66,7 @@ function Orders() {
                 <OrderLocation onChangeLocation={location => setOrderLocation(location)} />
                 <OrderSummary
                     amount={selectedProducts.length}
-                    totalPrice={ totalPrice }
+                    totalPrice={totalPrice}
                     onSubmit={handleSubmit} />
             </div>
             <Footer />
